@@ -11,7 +11,7 @@ with open('files/recipies.txt', 'r') as file:
             product, count, unit = file.readline().strip().split(' | ')
             ingredients_list.append({
                 'ingredient': product,
-                'count': count,
+                'count': int(count),
                 'unit': unit
             })
         file.readline()
@@ -25,13 +25,12 @@ def get_shop_list_by_dishes(dishes, person_count):
     for meal in dishes:
         if check_recipes_in_base(meal):
             for i in cook_book[meal]:
-                ingredient = [i['ingredient'], int(i['count']), i['unit']]
+                ingredient = [i['ingredient'], i['count']*person_count, i['unit']]
                 if ingredient not in shop_list:
                     shop_list.append(ingredient)
                 else:
                     shop_list[shop_list.index(ingredient)][1] += ingredient[1]
-    calc_ingredients(shop_list, person_count)
-
+    list_to_dict(shop_list)
 
 #Добавил проверку на случай, если нет такого рецепта в книге
 def check_recipes_in_base(meal):
@@ -41,23 +40,13 @@ def check_recipes_in_base(meal):
         return dish
 
 
-def calc_ingredients(shop_list, person_count):
-    calc_list = {}
+def list_to_dict(shop_list):
+    dict_list = {}
     for i in shop_list:
-        calc_list[i[0]] = {'measure': i[2], 'quality': (i[1]*person_count)}
-    pprint(calc_list)
-
+        dict_list[i[0]] = {'measure': i[2], 'quality': i[1]}
+    pprint(dict_list)
 
 get_shop_list_by_dishes(['Фахитос', 'Омлет'], 3)
-
-
-
-
-
-
-
-
-
 
 
 
